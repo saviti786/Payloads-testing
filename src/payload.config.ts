@@ -3,6 +3,7 @@ import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
+import { resendAdapter } from '@payloadcms/email-resend'
 
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
@@ -62,6 +63,12 @@ export default buildConfig({
     pool: {
       connectionString: process.env.POSTGRES_URL || '',
     },
+  }),
+  email: resendAdapter({
+    // Forgot password feature enabled
+    defaultFromAddress: 'onboarding@resend.dev',
+    defaultFromName: 'CRM TESTING WTC',
+    apiKey: process.env.RESEND_API_KEY ?? '',
   }),
   collections: [Pages, Posts, Media, Categories, Users, Contacts],
   cors: [getServerSideURL()].filter(Boolean),
